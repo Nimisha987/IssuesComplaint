@@ -1,0 +1,54 @@
+# version: "3.9"
+
+services:
+  postgres:
+    image: postgres:16
+    container_name: civic_postgres
+    environment:
+      POSTGRES_USER: civic_user
+      POSTGRES_PASSWORD: civic_pass
+      POSTGRES_DB: civic_complaints
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U civic_user"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build: ./backend
+    container_name: civic_backend
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgresql://civic_user:civic_pass@postgres:5432/civic_complaints
+      OPENROUTER_API_KEY: ${OPENROUTER_API_KEY}
+      GROQ_API_KEY: ${GROQ_API_KEY}
+      WHATSAPP_TOKEN: ${WHATSAPP_TOKEN}
+      WHATSAPP_PHONE_ID: ${WHATSAPP_PHONE_ID}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./backend:/app
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+
+  dashboard:
+    build: ./dashboard
+    container_name: civic_dashboard
+    ports:
+      - "3000:3000"
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:8000
+    depends_on:
+      - backend
+    volumes:
+      - ./dashboard:/app
+      - /app/node_modules
+    command: npm run dev
+
+volumes:
+  pgdata:

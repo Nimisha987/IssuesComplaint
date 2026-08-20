@@ -1,0 +1,16 @@
+# Backend
+backend/venv/
+backend/__pycache__/
+backend/**/__pycache__/
+backend/.env
+backend/*.db
+backend/uploads/
+
+# Dashboard
+dashboard/node_modules/
+dashboard/.next/
+dashboard/.env.local
+
+# General
+.DS_Store
+*.log
