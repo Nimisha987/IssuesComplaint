@@ -9,10 +9,10 @@ class Settings(BaseSettings):
     OPENROUTER_API_KEY: str
     GROQ_API_KEY: str
 
-    # WhatsApp Cloud API
-    WHATSAPP_TOKEN: str
-    WHATSAPP_PHONE_ID: str
-    WHATSAPP_VERIFY_TOKEN: str
+    # WhatsApp Cloud API (optional — not currently used)
+    WHATSAPP_TOKEN: str = ""
+    WHATSAPP_PHONE_ID: str = ""
+    WHATSAPP_VERIFY_TOKEN: str = ""
     WHATSAPP_BUSINESS_ACCOUNT_ID: str = ""
 
     # App
@@ -22,6 +22,5 @@ class Settings(BaseSettings):
     class Config:
         env_file = ".env"
 
-    RESEND_API_KEY: str = ""
 
 settings = Settings()
