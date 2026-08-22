@@ -1,6 +1,6 @@
-import dynamicImport from "next/dynamic";
+"use client";
 
-export const dynamic = "force-dynamic";
+import dynamicImport from "next/dynamic";
 
 const ComplaintMap = dynamicImport(
   () => import("@/components/ComplaintMap").then((mod) => mod.ComplaintMap),
